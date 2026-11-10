@@ -1,0 +1,3 @@
+# Dependencias opcionales para los modos CLOUD e HYBRID (OpenAI).
+-r requirements.txt
+openai>=1.40

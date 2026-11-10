@@ -1,0 +1,56 @@
+# Configuración general de VINNA-01
+# Las variables de entorno (archivo .env) tienen prioridad sobre algunos valores:
+#   VINNA_MODE, VINNA_OLLAMA_HOST, VINNA_OLLAMA_MODEL, VINNA_OPENAI_MODEL, OPENAI_API_KEY
+
+ai:
+  # LOCAL  -> solo Ollama (no necesita Internet ni API key)
+  # CLOUD  -> solo OpenAI (necesita OPENAI_API_KEY)
+  # HYBRID -> elige proveedor y usa el otro como respaldo si el primero falla
+  mode: LOCAL
+
+  hybrid:
+    # Proveedor preferido en modo HYBRID: local | cloud
+    prefer: local
+    # Si es true, los mensajes largos o complejos se envían primero a la nube.
+    complex_tasks_to_cloud: true
+    # Longitud (caracteres) a partir de la cual un mensaje se considera complejo.
+    complex_min_chars: 400
+
+  local:
+    host: http://localhost:11434
+    model: qwen2.5:0.5b
+    timeout_seconds: 120
+    temperature: 0.7
+
+  cloud:
+    # Verifica en la documentación de OpenAI que el modelo siga disponible.
+    model: gpt-4o-mini
+    timeout_seconds: 60
+    # null = no enviar temperatura (algunos modelos solo aceptan el valor por defecto)
+    temperature: null
+
+privacy:
+  # Si es false, los recuerdos de largo plazo NO se envían a la nube;
+  # solo el modelo local los recibe.
+  send_memories_to_cloud: false
+
+memory:
+  database: data/vinna.db
+  # Mensajes recientes (usuario + VINNA) que se envían como contexto.
+  context_messages: 12
+  # Límite de caracteres del historial enviado al modelo.
+  context_max_chars: 6000
+  # Máximo de recuerdos incluidos en cada petición.
+  max_memories_in_prompt: 10
+  # Horas de vida de un recuerdo temporal (!recuerda-temporal).
+  temporary_hours: 24
+
+interface:
+  width: 520
+  height: 720
+  # Minutos sin actividad antes de pasar al estado SLEEPING.
+  sleep_after_minutes: 5
+
+logging:
+  file: data/vinna.log
+  level: INFO

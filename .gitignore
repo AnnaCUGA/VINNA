@@ -1,0 +1,20 @@
+# Secretos
+.env
+
+# Datos locales (base de datos de memoria y registros)
+data/*
+!data/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Editores / sistema
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

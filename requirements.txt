@@ -1,0 +1,4 @@
+# Dependencias mínimas para el modo LOCAL (Ollama).
+# Tkinter y SQLite vienen incluidos con Python en Windows.
+pyyaml>=6.0
+pytest>=8.0
