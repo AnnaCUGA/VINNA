@@ -44,7 +44,8 @@ def test_ollama_missing_model_message(fake_ollama):
 
 
 def test_ollama_not_running_gives_clear_error():
-    client = OllamaClient(f"http://127.0.0.1:{_free_port()}", "qwen2.5:0.5b", timeout=2)
+    # En Windows rechazar una conexión a un puerto cerrado tarda ~2 s; el timeout debe ser mayor.
+    client = OllamaClient(f"http://127.0.0.1:{_free_port()}", "qwen2.5:0.5b", timeout=10)
     with pytest.raises(ProviderError, match="No se pudo conectar con Ollama"):
         client.chat([{"role": "user", "content": "hola"}])
     assert client.check()[0] is False

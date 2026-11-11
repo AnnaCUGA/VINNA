@@ -117,10 +117,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--modo", help="local | nube | hibrido (solo para esta ejecución)")
     args = parser.parse_args(argv)
 
-    # En Windows, si la salida se redirige, la codificación puede no admitir ✔/✘.
+    # En Windows, si la salida se redirige a un archivo, Python usa la codificación
+    # local (cp1252) y los acentos y ✔/✘ se rompen; en ese caso se fuerza UTF-8.
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
-            stream.reconfigure(errors="replace")
+            if stream.isatty():
+                stream.reconfigure(errors="replace")
+            else:
+                stream.reconfigure(encoding="utf-8", errors="replace")
 
     settings = load_settings()
     setup_logging(settings)
