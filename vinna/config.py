@@ -22,7 +22,7 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "hybrid": {"prefer": "local", "complex_tasks_to_cloud": True, "complex_min_chars": 400},
         "local": {
             "host": "http://localhost:11434",
-            "model": "qwen2.5:0.5b",
+            "model": "qwen2.5:1.5b",
             "timeout_seconds": 120,
             "temperature": 0.7,
         },

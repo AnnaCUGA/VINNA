@@ -28,6 +28,12 @@ LENGTH_GUIDE = {
 }
 
 
+MEMORY_INTRO = (
+    "Tienes una memoria: el usuario guarda datos sobre sí mismo con el comando !recuerda. "
+    "Solo conoces del usuario lo que aparece en la lista de abajo; nunca inventes otros datos."
+)
+
+
 @dataclass
 class Personality:
     name: str = "VINNA"
@@ -75,13 +81,21 @@ class Personality:
             lines.append("Reglas:")
             lines.extend(f"- {r}" for r in self.behavior_rules)
 
+        # Los modelos pequeños usan mejor los recuerdos si se presentan como datos
+        # directos sobre el usuario, con una instrucción explícita de cuándo usarlos.
+        lines.append("")
+        lines.append(MEMORY_INTRO)
         memories = list(memories)
         if memories:
-            lines.append("Recuerdos guardados con autorización del usuario (úsalos solo si son útiles):")
-            lines.extend(f"- [{m.category}] {m.content}" for m in memories)
+            lines.append("LO QUE SABES DEL USUARIO (te pidió recordarlo):")
+            lines.extend(f"- El usuario dijo: «{m.content}»" for m in memories)
+            lines.append(
+                "Cuando el usuario pregunte por sí mismo, por sus gustos o por lo que recuerdas, "
+                "responde directamente con estos datos. No digas que no tienes memoria."
+            )
         else:
             lines.append(
-                "No tienes recuerdos guardados relevantes. Si te preguntan por algo que no "
-                "aparece aquí, di que no lo recuerdas."
+                "Ahora no tienes datos guardados del usuario. Si te pregunta algo sobre sí mismo, "
+                "di que no lo recuerdas y que puede pedírtelo con !recuerda."
             )
         return "\n".join(lines)

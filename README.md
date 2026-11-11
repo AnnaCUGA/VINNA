@@ -22,7 +22,7 @@ py -3.12 -m venv .venv
 python -m pip install -r requirements.txt
 
 # Modelo local
-ollama pull qwen2.5:0.5b
+ollama pull qwen2.5:1.5b          # ~1 GB; qwen2.5:0.5b (~400 MB) es más ligero pero menos preciso
 
 # Opcional (nube):
 python -m pip install -r requirements-cloud.txt

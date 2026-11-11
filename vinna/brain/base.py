@@ -18,7 +18,7 @@ class ProviderError(Exception):
 
 class ChatProvider(Protocol):
     name: str  # 'local' | 'cloud'
-    label: str  # texto para mostrar, p. ej. "Ollama (qwen2.5:0.5b)"
+    label: str  # texto para mostrar, p. ej. "Ollama (qwen2.5:1.5b)"
 
     def is_configured(self) -> bool: ...
 

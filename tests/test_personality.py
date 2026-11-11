@@ -42,5 +42,7 @@ def test_memories_are_listed_and_absence_is_explicit():
     p = Personality()
     with_mem = p.build_system_prompt([_memory("Le gusta el té verde")])
     assert "Le gusta el té verde" in with_mem
+    assert "LO QUE SABES DEL USUARIO" in with_mem  # presentado como datos directos
+    assert "No digas que no tienes memoria" in with_mem
     without = p.build_system_prompt([])
     assert "no lo recuerdas" in without  # evita inventar recuerdos

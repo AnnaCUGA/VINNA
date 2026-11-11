@@ -18,7 +18,7 @@ ai:
 
   local:
     host: http://localhost:11434
-    model: qwen2.5:0.5b
+    model: qwen2.5:1.5b
     timeout_seconds: 120
     temperature: 0.7
 
