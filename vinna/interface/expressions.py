@@ -1,4 +1,4 @@
-"""Estados visuales de VINNA y la apariencia de cada uno."""
+"""Estados visuales de VINNA, su texto y la paleta de la carita de gato."""
 
 from __future__ import annotations
 
@@ -17,19 +17,38 @@ class VisualState(str, Enum):
 
 @dataclass(frozen=True)
 class Expression:
-    color: str        # color de los ojos
-    openness: float   # 1.0 = ojo normal; <1 entrecerrado; >1 muy abierto
     caption: str      # texto bajo el rostro
-    animated: bool    # si necesita refrescos periódicos
 
 
 EXPRESSIONS: dict[VisualState, Expression] = {
-    VisualState.IDLE: Expression("#4FC3F7", 1.0, "", True),            # parpadeo ocasional
-    VisualState.LISTENING: Expression("#81C784", 1.15, "Te escucho…", True),
-    VisualState.THINKING: Expression("#FFD54F", 0.75, "Pensando…", True),
-    VisualState.SPEAKING: Expression("#4FC3F7", 1.0, "", True),
-    VisualState.SLEEPING: Expression("#546E7A", 0.0, "Descansando", True),
-    VisualState.ERROR: Expression("#E57373", 1.0, "Algo salió mal", False),
+    VisualState.IDLE: Expression(""),
+    VisualState.LISTENING: Expression("Te escucho…"),
+    VisualState.THINKING: Expression("Pensando…"),
+    VisualState.SPEAKING: Expression(""),
+    VisualState.SLEEPING: Expression("Descansando"),
+    VisualState.ERROR: Expression("Algo salió mal"),
 }
 
-BACKGROUND = "#0B1015"
+# Fondo de la "pantalla" del robot y colores del diseño.
+BACKGROUND = "#140D22"
+PALETTE = {
+    "glow": "#3B2466",       # halo morado alrededor de cada trazo
+    "ear": "#E6DAF7",        # lila de las orejas
+    "ear_inner": "#F7A8D2",  # rosa del interior de las orejas
+    "pink": "#F7A8D2",       # nariz y bigotes
+    "white": "#FFFFFF",      # ojos y boca
+    "sparkle": "#D6C8F2",    # brillitos de los ojos
+    "blush": "#B04A86",      # chapitas
+    "sweat": "#8FD3FF",      # gotita de sudor (error)
+    "caption": "#A99BC4",
+}
+
+# Versión atenuada para cuando VINNA duerme.
+PALETTE_DIM = {
+    **PALETTE,
+    "ear": "#9C8FB5",
+    "ear_inner": "#A8729A",
+    "pink": "#A8729A",
+    "white": "#B9B0CC",
+    "caption": "#7D7192",
+}

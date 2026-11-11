@@ -117,3 +117,16 @@ Entorno: Windows, Python 3.12.10, Ollama 0.40.16.
 
 - A veces el modelo responde en primera persona con los datos del usuario ("Me gusta tomar té verde").
 - No se probaron: modo sin Internet, modo nube con clave real ni el estado SLEEPING (5 min).
+
+## 2026-11-10 — Nueva cara de gato animada
+
+Rostro rediseñado a partir de una ilustración de referencia (`docs/cara_vinna.gif`): orejas lilas con
+interior rosa, ojos blancos con brillitos, nariz rosa, boca "ω" de un solo trazo y bigotes rosas, con
+halo morado.
+
+- `interface/face.py`: animación basada en el tiempo (~20 cuadros/s): respiración, parpadeos (a veces
+  dobles), miradas aleatorias y movimientos de orejas.
+- Cada estado se distingue: escuchar (ojos grandes, chapitas, orejas paradas, ondas de sonido), pensar
+  (ojos hacia arriba, cabeza ladeada, "• • •"), hablar (ojos `^ ^`, la ω se estira al ritmo),
+  dormir (colores atenuados, "z" flotando), error (sacudida, `> <`, gotita de sudor).
+- `interface/expressions.py`: paleta de colores y versión atenuada para dormir.
