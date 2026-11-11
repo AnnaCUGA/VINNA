@@ -85,3 +85,35 @@ con Ollama real y una clave real de OpenAI (ver lista en el README).
 - Clasificación automática de categorías; sugerir (no guardar) recuerdos.
 - Búsqueda avanzada y detección de recuerdos casi duplicados.
 - Revisar si `qwen2.5:0.5b` sigue bien la personalidad en español; quizá `qwen2.5:1.5b`.
+
+## 2026-11-10 — Pruebas reales en Windows y ajustes de memoria
+
+Entorno: Windows, Python 3.12.10, Ollama 0.40.16.
+
+### Cambios
+
+| Commit | Cambio |
+|---|---|
+| `dfca8c5` | La prueba de conexión fallida usa un timeout de 10 s (Windows tarda ~2 s en rechazar un puerto cerrado); la salida redirigida se fuerza a UTF-8 |
+| `40ea256` | Modelo por defecto `qwen2.5:1.5b`; los recuerdos se presentan en el prompt como datos directos del usuario |
+| `fd53c27` | "¿Qué recuerdas de mí?" se responde desde la base de datos (`memory/recall.py`); los datos del usuario se repiten justo antes del mensaje actual |
+
+### Comparación de modelos (misma conversación)
+
+| Pregunta | qwen2.5:0.5b | qwen2.5:1.5b (con los ajustes) |
+|---|---|---|
+| ¿Qué me gusta tomar? | Sugiere otra cosa | Té verde |
+| ¿Cómo se llama mi gato? | Michi | Michi |
+| ¿Qué recuerdas de mí? | Incoherente | Lista exacta (sin modelo) |
+| ¿Tienes sentimientos? | Variable (a veces dice que sí) | No |
+
+### Resultados
+
+- pytest: 64 pasadas (las pruebas de ventana se omiten si corren mientras otra app controla la pantalla).
+- Diagnóstico: Python, Tkinter y Ollama correctos; nube sin configurar.
+- Ventana (prueba manual en Windows): estados LISTENING/THINKING/SPEAKING/ERROR correctos; la ventana se puede mover mientras el modelo responde; `!recuerda`, persistencia tras cerrar y abrir, `!olvida`, `!borrar-historial` y error de nube sin clave funcionan.
+
+### Pendiente
+
+- A veces el modelo responde en primera persona con los datos del usuario ("Me gusta tomar té verde").
+- No se probaron: modo sin Internet, modo nube con clave real ni el estado SLEEPING (5 min).
