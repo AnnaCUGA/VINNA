@@ -23,7 +23,10 @@ def test_messages_contain_personality_memories_and_history(build):
     sent = local.calls[-1]
     assert sent[0]["role"] == "system"
     assert "Eres VINNA" in sent[0]["content"] and "Me gusta el té verde" in sent[0]["content"]
-    assert [m["content"] for m in sent[1:]] == ["primer mensaje", "hola desde local", "segundo mensaje"]
+    convo = [m["content"] for m in sent[1:] if m["role"] != "system"]
+    assert convo == ["primer mensaje", "hola desde local", "segundo mensaje"]
+    # recordatorio de los datos justo antes del mensaje actual
+    assert sent[-2]["role"] == "system" and "té verde" in sent[-2]["content"]
     # sin duplicar el mensaje actual
     assert sum(1 for m in sent if m["content"] == "segundo mensaje") == 1
 
@@ -120,3 +123,24 @@ def test_empty_input_is_ignored(build):
     orch, local, _ = build()
     assert orch.handle("   ") is None
     assert local.calls == []
+
+
+def test_no_reminder_without_memories(build):
+    orch, local, _ = build()
+    orch.handle("hola")
+    assert [m["role"] for m in local.calls[-1]] == ["system", "user"]
+
+
+def test_recall_question_is_answered_from_memory(build):
+    orch, local, _ = build()
+    orch.handle("!recuerda Me gusta el té verde")
+    orch.handle("!recuerda Mi gato se llama Michi")
+    reply = orch.handle("¿Qué recuerdas de mí?")
+    assert reply.provider == "memoria" and local.calls == []  # sin pasar por el modelo
+    assert "Me gusta el té verde" in reply.text and "Michi" in reply.text
+    assert orch.short_term.count() == 2
+
+
+def test_recall_question_without_memories(build):
+    orch, _, _ = build()
+    assert "!recuerda" in orch.handle("que sabes de mi?").text

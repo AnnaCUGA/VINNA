@@ -167,7 +167,7 @@ class VinnaApp:
         if reply.notice:
             self._append("notice", f"⚠ {reply.notice}")
         if reply.kind is ReplyKind.ASSISTANT:
-            source = "local" if reply.provider == "local" else "nube"
+            source = {"local": "local", "cloud": "nube"}.get(reply.provider or "", reply.provider or "")
             self._append("assistant", f"{self.name} ({source}): {reply.text}")
             speak_ms = min(6000, 800 + 25 * len(reply.text))
             self._set_state(VisualState.SPEAKING, revert_ms=speak_ms)

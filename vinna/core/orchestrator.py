@@ -15,6 +15,7 @@ from vinna.core.commands import CommandProcessor, is_command
 from vinna.core.events import Reply, ReplyKind, StatusEvent
 from vinna.memory.database import Database
 from vinna.memory.long_term import LongTermMemory
+from vinna.memory.recall import format_recall, is_recall_question
 from vinna.memory.retrieval import select_relevant
 from vinna.memory.short_term import ShortTermMemory
 from vinna.personality.character import Personality
@@ -22,6 +23,7 @@ from vinna.personality.character import Personality
 log = logging.getLogger(__name__)
 
 MAX_INPUT_CHARS = 4000
+MEMORY_PROVIDER = "memoria"  # respuestas generadas desde la base de datos, sin modelo
 
 
 class Orchestrator:
@@ -47,6 +49,15 @@ class Orchestrator:
             )
         messages = [{"role": "system", "content": self.personality.build_system_prompt(memories)}]
         messages.extend(m.as_chat() for m in self.short_term.recent())
+        if memories:
+            # Los modelos pequeños atienden más a lo último que leen: se repiten los
+            # datos del usuario justo antes de su mensaje.
+            facts = "; ".join(f"«{m.content}»" for m in memories)
+            messages.append({
+                "role": "system",
+                "content": f"Recordatorio: el usuario te pidió recordar esto: {facts}. "
+                           "Úsalo si su mensaje tiene que ver con ello.",
+            })
         messages.append({"role": "user", "content": user_text})
         return messages
 
@@ -65,6 +76,11 @@ class Orchestrator:
                 )
             if len(text) > MAX_INPUT_CHARS:
                 return Reply(f"El mensaje es demasiado largo (máximo {MAX_INPUT_CHARS} caracteres).", ReplyKind.ERROR)
+            if is_recall_question(text):
+                # "¿Qué recuerdas de mí?" se responde desde la base de datos, sin el modelo.
+                answer = format_recall(self.long_term.list_active())
+                self.short_term.save_exchange(text, answer, MEMORY_PROVIDER)
+                return Reply(answer, ReplyKind.ASSISTANT, provider=MEMORY_PROVIDER)
             try:
                 result = self.router.generate(text, lambda provider: self.build_messages(text, provider))
             except RouterError as exc:

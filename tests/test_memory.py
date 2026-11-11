@@ -163,3 +163,13 @@ def test_retrieval_prioritizes_keywords(db):
     picked = select_relevant(lt.list_active(), "¿Cómo se llama mi perro?", limit=3)
     assert any("Toby" in m.content for m in picked)
     assert len(picked) == 3
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("¿Qué recuerdas de mí?", True), ("que sabes sobre mi", True), ("¿Qué te he contado?", True),
+    ("¿Cuáles son mis recuerdos?", True), ("¿Qué recuerdas?", True),
+    ("¿Qué me gusta tomar?", False), ("¿Recuerdas cómo se hace un pastel?", False), ("hola", False),
+])
+def test_recall_question_detection(text, expected):
+    from vinna.memory.recall import is_recall_question
+    assert is_recall_question(text) is expected
