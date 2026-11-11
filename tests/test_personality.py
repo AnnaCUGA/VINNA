@@ -45,5 +45,7 @@ def test_memories_are_listed_and_absence_is_explicit():
     assert "LO QUE SABES DEL USUARIO" in with_mem  # presentado como datos directos
     assert "No digas que no tienes memoria" in with_mem
     assert "segunda persona" in with_mem  # los datos son del usuario, no de VINNA
+    first_person = p.build_system_prompt([_memory("Me gusta el café")])
+    assert "Te gusta el café" in first_person  # se pasa al modelo en segunda persona
     without = p.build_system_prompt([])
     assert "no lo recuerdas" in without  # evita inventar recuerdos

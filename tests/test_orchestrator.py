@@ -22,7 +22,7 @@ def test_messages_contain_personality_memories_and_history(build):
     orch.handle("segundo mensaje")
     sent = local.calls[-1]
     assert sent[0]["role"] == "system"
-    assert "Eres VINNA" in sent[0]["content"] and "Me gusta el té verde" in sent[0]["content"]
+    assert "Eres VINNA" in sent[0]["content"] and "Te gusta el té verde" in sent[0]["content"]
     convo = [m["content"] for m in sent[1:] if m["role"] != "system"]
     assert convo == ["primer mensaje", "hola desde local", "segundo mensaje"]
     # recordatorio de los datos justo antes del mensaje actual
@@ -137,7 +137,7 @@ def test_recall_question_is_answered_from_memory(build):
     orch.handle("!recuerda Mi gato se llama Michi")
     reply = orch.handle("¿Qué recuerdas de mí?")
     assert reply.provider == "memoria" and local.calls == []  # sin pasar por el modelo
-    assert "Me gusta el té verde" in reply.text and "Michi" in reply.text
+    assert "Te gusta el té verde" in reply.text and "Tu gato se llama Michi" in reply.text
     assert orch.short_term.count() == 2
 
 

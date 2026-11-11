@@ -168,8 +168,23 @@ def test_retrieval_prioritizes_keywords(db):
 @pytest.mark.parametrize("text,expected", [
     ("¿Qué recuerdas de mí?", True), ("que sabes sobre mi", True), ("¿Qué te he contado?", True),
     ("¿Cuáles son mis recuerdos?", True), ("¿Qué recuerdas?", True),
+    ("Cuéntame algo sobre mí", True), ("¿Quién soy?", True),
     ("¿Qué me gusta tomar?", False), ("¿Recuerdas cómo se hace un pastel?", False), ("hola", False),
 ])
 def test_recall_question_detection(text, expected):
     from vinna.memory.recall import is_recall_question
     assert is_recall_question(text) is expected
+
+
+@pytest.mark.parametrize("first,second", [
+    ("Me gusta el té verde", "Te gusta el té verde"),
+    ("Mi gato se llama Michi", "Tu gato se llama Michi"),
+    ("Estoy aprendiendo robótica", "Estás aprendiendo robótica"),
+    ("No me gusta el café", "No te gusta el café"),
+    ("El nombre de mi perro es Toby", "El nombre de tu perro es Toby"),
+    ("Soy de Puebla", "Eres de Puebla"),
+    ("La reunión es el lunes", "La reunión es el lunes"),
+])
+def test_to_second_person(first, second):
+    from vinna.memory.pronouns import to_second_person
+    assert to_second_person(first) == second

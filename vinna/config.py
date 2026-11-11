@@ -138,6 +138,8 @@ def load_settings(config_dir: Path | None = None, root: Path | None = None) -> S
         raw["ai"]["local"]["host"] = host if host.startswith("http") else f"http://{host}"
     if os.environ.get("VINNA_OLLAMA_MODEL"):
         raw["ai"]["local"]["model"] = os.environ["VINNA_OLLAMA_MODEL"]
+    if os.environ.get("VINNA_DATABASE"):
+        raw["memory"]["database"] = os.environ["VINNA_DATABASE"]
     if os.environ.get("VINNA_OPENAI_MODEL"):
         raw["ai"]["cloud"]["model"] = os.environ["VINNA_OPENAI_MODEL"]
 

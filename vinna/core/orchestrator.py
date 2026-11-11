@@ -15,6 +15,7 @@ from vinna.core.commands import CommandProcessor, is_command
 from vinna.core.events import Reply, ReplyKind, StatusEvent
 from vinna.memory.database import Database
 from vinna.memory.long_term import LongTermMemory
+from vinna.memory.pronouns import to_second_person
 from vinna.memory.recall import format_recall, is_recall_question
 from vinna.memory.retrieval import select_relevant
 from vinna.memory.short_term import ShortTermMemory
@@ -52,7 +53,7 @@ class Orchestrator:
         if memories:
             # Los modelos pequeños atienden más a lo último que leen: se repiten los
             # datos del usuario justo antes de su mensaje.
-            facts = "; ".join(f"«{m.content}»" for m in memories)
+            facts = "; ".join(f"«{to_second_person(m.content)}»" for m in memories)
             messages.append({
                 "role": "system",
                 "content": f"Recordatorio: el usuario te pidió recordar esto: {facts}. "

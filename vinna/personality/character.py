@@ -14,6 +14,8 @@ from typing import TYPE_CHECKING, Iterable
 
 import yaml
 
+from vinna.memory.pronouns import to_second_person
+
 if TYPE_CHECKING:  # solo para anotaciones; evita dependencias circulares
     from vinna.memory.long_term import Memory
 
@@ -87,8 +89,8 @@ class Personality:
         lines.append(MEMORY_INTRO)
         memories = list(memories)
         if memories:
-            lines.append("LO QUE SABES DEL USUARIO (te pidió recordarlo):")
-            lines.extend(f"- El usuario dijo: «{m.content}»" for m in memories)
+            lines.append("LO QUE SABES DEL USUARIO (te pidió recordarlo; ya está escrito hablándole a él o ella):")
+            lines.extend(f"- {to_second_person(m.content)}" for m in memories)
             lines.append(
                 "Cuando el usuario pregunte por sí mismo, por sus gustos o por lo que recuerdas, "
                 "responde directamente con estos datos. No digas que no tienes memoria."
@@ -98,7 +100,7 @@ class Personality:
                 "(«te gusta», «tu gato», «estás aprendiendo»), nunca en primera persona."
             )
             lines.append(
-                "Ejemplo: si el usuario dijo «Me gusta el café» y pregunta qué le gusta tomar, "
+                "Ejemplo: si sabes «Te gusta el café» y te pregunta «¿qué me gusta tomar?», "
                 "responde «¡Te gusta el café!», no «Me gusta el café»."
             )
         else:
