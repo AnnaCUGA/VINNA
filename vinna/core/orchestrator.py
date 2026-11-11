@@ -56,7 +56,8 @@ class Orchestrator:
             messages.append({
                 "role": "system",
                 "content": f"Recordatorio: el usuario te pidió recordar esto: {facts}. "
-                           "Úsalo si su mensaje tiene que ver con ello.",
+                           "Úsalo si su mensaje tiene que ver con ello y háblale en segunda persona "
+                           "(«te gusta…», «tu…»): son datos del usuario, no tuyos.",
             })
         messages.append({"role": "user", "content": user_text})
         return messages

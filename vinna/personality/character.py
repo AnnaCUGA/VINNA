@@ -93,6 +93,14 @@ class Personality:
                 "Cuando el usuario pregunte por sí mismo, por sus gustos o por lo que recuerdas, "
                 "responde directamente con estos datos. No digas que no tienes memoria."
             )
+            lines.append(
+                "Estos datos son del USUARIO, no tuyos: al usarlos háblale en segunda persona "
+                "(«te gusta», «tu gato», «estás aprendiendo»), nunca en primera persona."
+            )
+            lines.append(
+                "Ejemplo: si el usuario dijo «Me gusta el café» y pregunta qué le gusta tomar, "
+                "responde «¡Te gusta el café!», no «Me gusta el café»."
+            )
         else:
             lines.append(
                 "Ahora no tienes datos guardados del usuario. Si te pregunta algo sobre sí mismo, "
