@@ -1,3 +1,14 @@
+<img src="docs/banner.svg" alt="VINNA-01: robot de escritorio con inteligencia artificial. Cerebro local o en la nube, memoria que tú autorizas y un rostro de gato animado." width="100%">
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.12">
+  <img src="https://img.shields.io/badge/Ollama-local-1E1433?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama, modo local">
+  <img src="https://img.shields.io/badge/OpenAI-opcional-412991?style=for-the-badge" alt="OpenAI, opcional">
+  <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite">
+  <img src="https://img.shields.io/badge/Tkinter-F7A8D2?style=for-the-badge" alt="Tkinter">
+  <img src="https://img.shields.io/badge/pytest-70_pruebas-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white" alt="pytest, 70 pruebas">
+</p>
+
 # VINNA-01
 
 VINNA es un **robot de escritorio inteligente**, modular y evolutivo. Esta versión
@@ -6,6 +17,39 @@ personalidad, recuerda lo que le autorizas y muestra un rostro con ojos animados
 La voz, la visión y el cuerpo físico llegarán en fases posteriores.
 
 VINNA es un programa de IA: no tiene conciencia ni sentimientos humanos.
+
+<p align="center">
+  <img src="docs/cara_vinna.gif" alt="Las seis expresiones de VINNA: normal, escuchando, pensando, hablando, dormida y error." width="100%">
+</p>
+
+## Qué hace
+
+| | |
+|---|---|
+| 🧠 **Piensa donde tú elijas** | Tres modos de IA: local con Ollama (sin Internet), nube con OpenAI, o híbrido con respaldo anunciado. |
+| 💬 **Tiene personalidad propia** | Nombre, tono, rasgos y reglas viven en un archivo YAML, independientes del modelo que responda. |
+| 📝 **Recuerda solo lo que autorizas** | Los recuerdos se guardan con comandos explícitos, permanentes o temporales, en SQLite. |
+| 🔒 **Cuida tu privacidad** | Rechaza guardar contraseñas y claves, y no envía tus recuerdos a la nube salvo que lo actives. |
+| 🐱 **Te mira** | Un rostro de gato animado con seis estados: normal, escuchando, pensando, hablando, dormida y error. |
+
+## Cómo fluye un mensaje
+
+```mermaid
+flowchart LR
+    U["Tú"] --> I["Interfaz<br/>ventana o consola"]
+    I --> O["Orquestador"]
+    O -->|"empieza con !"| C["Comandos"]
+    C --> M[("Memoria<br/>SQLite")]
+    O -->|"mensaje normal"| P["Personalidad +<br/>recuerdos + historial"]
+    M --> P
+    P --> R["Enrutador<br/>de modelos"]
+    R --> L["Ollama<br/>local"]
+    R --> N["OpenAI<br/>nube"]
+    L --> I
+    N --> I
+```
+
+La interfaz no conoce a los modelos y el orquestador no conoce a la ventana, así que la consola (y más adelante la voz) reutilizan el mismo cerebro.
 
 ## Requisitos
 
